@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deposit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 {
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-top: 50px;
+        }
+        h2 {
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .navbar a.active {
+            background-color: #007bff;
+            color: white;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            text-align: center;
+        }
+        input[type="number"] {
+            margin-bottom: 15px;
+            padding: 8px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: box-shadow 0.3s ease;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/details?id={{_id}}">Home</a>
+        <a class="active" href="/deposit?id={{_id}}">Deposit</a>
+        <a href="/withdraw?id={{_id}}">Withdraw</a>
+        <a href="/">Log out</a>
+
+    </div>
+    <h1>Deposit</h1>
+    <form method="post" action="">
+        <label for="amount">Enter the amount you want to deposit</label>
+        <br>
+        <input type="number" placeholder="amount" id="amount" name="amount">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        const navbarLinks = document.querySelectorAll('.navbar a');
+        navbarLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            link.setAttribute('href', href.replace('{{_id}}', id));
+        });
+    </script>
+</body>
+</html>
