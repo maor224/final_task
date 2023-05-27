@@ -36,6 +36,7 @@ class HTTPServer:
         user = self.db.get_user_by_id(user_id)
         with open('templates/details.html', 'rb') as file:
             name = html.escape(user["first_name"] + " " + user["last_name"])
+            print(name)
             balance = html.escape(str(user["balance"]))
             file_code = file.read().replace(b'name', name.encode())
             return file_code.replace(b'amount', balance.encode())
