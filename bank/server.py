@@ -142,9 +142,10 @@ class HTTPServer:
             lock.acquire()
 
             try:
-                if self.db.update_user_balance(user['code'], int(amount), transaction_type) and \
-                        self.db.insert_transaction(user_id, int(amount), transaction_type):
-                    return f"/details?id={user_id}"
+                flag = self.db.update_user_balance(user['code'], int(amount), transaction_type)
+                if flag:
+                    if self.db.insert_transaction(user_id, int(amount), transaction_type, flag):
+                        return f"/details?id={user_id}"
             finally:
                 # Release the lock after the transaction is completed
                 lock.release()

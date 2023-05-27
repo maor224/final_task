@@ -165,7 +165,11 @@ class DBHandler:
         if actionType == 0:
             update_operation = {'$inc': {'balance': new_balance}}
         elif actionType == 1:
-            update_operation = {'$inc': {'balance': -new_balance}}
+            user = self.get_user_by_code(code)
+            if user['balance'] - new_balance >= 0:
+                update_operation = {'$inc': {'balance': -new_balance}}
+            else:
+                update_operation = {'$inc': {'balance': 0}}
         else:
             return False
 
@@ -183,7 +187,7 @@ class DBHandler:
             # Handle the case where another transaction updated the document before this operation
             return False
 
-    def insert_transaction(self, user_id, amount, transaction_type):
+    def insert_transaction(self, user_id, amount, transaction_type, flag):
         """
         Inserts a new transaction document into the 'transactions' collection.
 
@@ -194,6 +198,7 @@ class DBHandler:
 
         Returns:
             bool: True if the transaction was inserted successfully, False otherwise.
+            flag: True if the update done successfully, False otherwise.
         """
         transactions = self.getTransactionsCollection()
 
@@ -203,18 +208,21 @@ class DBHandler:
         if transaction_type != 0 and transaction_type != 1:
             return False
 
-        # Create a transaction document with the provided information
-        transaction_document = {
-            'user_id': ObjectId(user_id),
-            'amount': amount,
-            'transaction_type': transaction_type,
-            'timestamp': datetime.now(),
-            'balance': user['balance']
-        }
+        if not flag:
+            # Create a transaction document with the provided information
+            transaction_document = {
+                'user_id': ObjectId(user_id),
+                'amount': amount,
+                'transaction_type': transaction_type,
+                'timestamp': datetime.now(),
+                'balance': user['balance']
+            }
 
-        # Insert the transaction document into the collection
-        transactions.insert_one(transaction_document)
-        return True
+            # Insert the transaction document into the collection
+            transactions.insert_one(transaction_document)
+            return True
+        else:
+            return False
 
     def get_transactions_by_user_id(self, user_id):
         """
